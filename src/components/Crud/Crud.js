@@ -2,13 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './Crud.css';
 import shortid from "shortid";
+import CrudItem from "./CrudItem";
 
 class Crud extends React.Component{
 
     constructor(props) {
         super(props);
-
-        this.timerId = null;
 
         // Привязываем функции использующие контекст
         this.onAdd = this.onAdd.bind(this);
@@ -16,17 +15,19 @@ class Crud extends React.Component{
 
     state = {
         data: [],
-        text: 'фф'
+        text: ''
     };
 
     changeText = (evt) => {
         this.setState( prev => ({text: evt.target.value}));
-
-//        console.log(evt.target.value);
     }
 
 
     onAdd(evt) {
+
+        if (this.state.text.length == 0)
+            return;
+
         let value = {
             "id": 0,
             "content": this.state.text
@@ -45,6 +46,7 @@ class Crud extends React.Component{
                 console.log('onAdd - RESPONSE', response);
                 console.log('onAdd - RESPONSE status = ' + response.status);
 
+                this.setState( prev => ({text: ''}));
                 this.loadData();
 //                return response;
             });
@@ -69,29 +71,15 @@ class Crud extends React.Component{
                 console.log('onDelete - RESPONSE status = ' + response.status);
 
                 this.loadData();
-//                return response;
             });
     }
 
-
     // После отображения элемента
     componentDidMount = () => {
-        console.log('componentDidMount');
         this.loadData();
     }
 
-    // После изменения элемента
-    componentDidUpdate() {
-        console.log('componentDidUpdate');
-    }
-
-    // Перед удалением
-    componentWillUnmount() {
-        console.log('componentWillUnmount');
-    }
-
     loadData = () => {
-//        console.log('REACT_APP_TEXT_URL = ' + process.env.REACT_APP_TEXT_URL);
 
         const requestOptions = {
             method: 'GET',
@@ -129,16 +117,7 @@ class Crud extends React.Component{
                 <div id="data">
 
                     {this.state.data.map(item =>
-
-                        <div key={item.id} className="data_item_container">
-                            <div className="data_item_close">
-                                <span className="material-icons" onClick={(evt) => this.onDelete(item.id)}>highlight_off</span>
-                            </div>
-                            <div className="data_item">
-                                {item.content}
-                            </div>
-                        </div>
-
+                        <CrudItem key={item.id} item={item} onDelete={this.onDelete} />
                     )}
 
                 </div>
