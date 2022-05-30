@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './Crud.css';
-import shortid from "shortid";
 import CrudItem from "./CrudItem";
 
 class Crud extends React.Component{
@@ -25,7 +23,7 @@ class Crud extends React.Component{
 
     onAdd(evt) {
 
-        if (this.state.text.length == 0)
+        if (this.state.text.length === 0)
             return;
 
         let value = {
@@ -96,7 +94,7 @@ class Crud extends React.Component{
             .then(
                 (data) => {
                     console.log('Load data - OK', data);
-                    this.setState( prev => ({data: data}));
+                    this.setState(prev => ({data: data}));
                 },
                 // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
                 // чтобы не перехватывать исключения из ошибок в самих компонентах.
@@ -127,7 +125,6 @@ class Crud extends React.Component{
                         <textarea
                             id="new_item_note"
                             name="new_item_note"
-                            type="text"
                             onChange={this.changeText}
                             value={this.state.text}
                         >
